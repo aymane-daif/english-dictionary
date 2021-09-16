@@ -1,17 +1,25 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <Search @wordResult="results = $event" />
+  <Result :results="results" />
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Result from './components/Result.vue';
+import Search from './components/Search.vue';
 
 export default {
   name: 'App',
+  methods: {},
+  data() {
+    return {
+      results: [],
+    };
+  },
   components: {
-    HelloWorld
-  }
-}
+    Search,
+    Result,
+  },
+};
 </script>
 
 <style>
