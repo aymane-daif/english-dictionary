@@ -1,6 +1,6 @@
 <template>
-  <form @submit.prevent="handleSearch">
-    <input type="search" v-model="word" />
+  <form @submit.prevent="handleSearch" class="search">
+    <input type="search" v-model="word" placeholder="Enter your word" />
   </form>
 </template>
 
@@ -11,21 +11,25 @@ export default {
       word: '',
       uri: 'https://api.dictionaryapi.dev/api/v2/entries/en/',
       wordResult: [],
+      error: false,
     };
   },
   methods: {
     handleSearch() {
-      console.log(this.word);
       if (this.word.trim()) {
         let endPoint = this.uri + this.word;
         fetch(endPoint)
           .then((res) => res.json())
           .then((data) => {
-            console.log(data);
-            this.wordResult = data[0];
-            this.$emit('wordResult', data[0]);
+            if (data.length) {
+              this.error = false;
+              this.wordResult = data;
+              this.$emit('wordResult', this.wordResult);
+            } else {
+              this.error = true;
+            }
+            this.$emit('error', this.error);
           })
-
           .catch((err) => {
             console.log(err.message);
           });
@@ -35,4 +39,17 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.search {
+  background: #c81c42;
+  padding: 4rem 0;
+}
+.search input {
+  width: 80%;
+  padding: 0.75rem;
+  border: none;
+  outline: none;
+  border-radius: 10px;
+  font-family: inherit;
+}
+</style>
